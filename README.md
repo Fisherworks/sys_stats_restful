@@ -9,24 +9,24 @@ So this is it, done in kinda less than 3 hours, not quite sophisticated or flexi
 ## What can this offer
 
 ```commandline
-curl http://<hostname>:9090/stats
+curl http://<hostname>:9090/stats/<data_type>
 ```
 
-It returns the sensor data immediately. 
+The ```data_type``` can be either ```du, temps, boot_time``` for now. Then it can returns the sensor data immediately. 
 
 ```commandline
+curl http://192.168.12.34:9090/stats/temps
+
 {
-    "du": {
-        "free_size": 4177.87,
-        "free_rate": 29.4
-    },
-    "temps": {
+    "code": 0,
+    "status": "success",
+    "data": {
         "cpu_thermal": {
-            "curr": 59.44,
+            "curr": 57.78,
             "crit": 100.0
         },
         "gpu_thermal": {
-            "curr": 58.89,
+            "curr": 57.22,
             "crit": 95.0
         }
     }

@@ -1,30 +1,54 @@
+sensor:
   - platform: rest
-    name: Tinker HW Stats  # name this as you need, here I'm using Asus Tinker Board 2S
+    name: Sys Stats Du  # name this as you need
     json_attributes:
-      - du
-      - temps
-    scan_interval: 120  # how often the ha queries the restful service and update data (in seconds)
-    resource: http://192.168.10.253:9090/stats  # setup your service host as full url here
+      - data
+    scan_interval: 300  # how often the ha queries the restful service and update data (in seconds)
+    resource: http://<your host>:9090/stats/du  # setup your service host as full url here
 
   - platform: template
     sensors:
       disk_free_size:
         friendly_name: "Disk Free Size" 
-        value_template: "{{ state_attr('sensor.tinker_hw_stats', 'du')['free_size'] | float }}"
+        value_template: "{{ state_attr('sensor.sys_stats_du', 'data')['free_size'] | float }}"
         icon_template: mdi:harddisk
         unit_of_measurement: "MB"
       disk_free_rate:
         friendly_name: "Disk Free Rate" 
-        value_template: "{{ state_attr('sensor.tinker_hw_stats', 'du')['free_rate'] | float }}"
+        value_template: "{{ state_attr('sensor.sys_stats_du', 'data')['free_rate'] | float }}"
         icon_template: mdi:harddisk
         unit_of_measurement: "%"
+
+  - platform: rest
+    name: Sys Stats Temps  # name this as you need
+    json_attributes:
+      - data
+    scan_interval: 60  # how often the ha queries the restful service and update data (in seconds)
+    resource: http://<your host>:9090/stats/temps  # setup your service host as full url here
+
+  - platform: template
+    sensors:
       cpu_temp:
         friendly_name: "CPU Temperature"
-        value_template: "{{ state_attr('sensor.tinker_hw_stats', 'temps')['cpu_thermal']['curr'] | float }}"
+        value_template: "{{ state_attr('sensor.sys_stats_temps', 'data')['cpu_thermal']['curr'] | float }}"
         icon_template: mdi:cpu-64-bit
         unit_of_measurement: "°C"
       gpu_temp:
         friendly_name: "GPU Temperature"
-        value_template: "{{ state_attr('sensor.tinker_hw_stats', 'temps')['gpu_thermal']['curr'] | float }}"
+        value_template: "{{ state_attr('sensor.sys_stats_temps', 'data')['gpu_thermal']['curr'] | float }}"
         icon_template: mdi:expansion-card
         unit_of_measurement: "°C"
+
+  - platform: rest
+    name: Sys Stats Times  # name this as you need
+    json_attributes:
+      - data
+    scan_interval: 120  # how often the ha queries the restful service and update data (in seconds)
+    resource: http://<your host>:9090/stats/boot_time  # setup your service host as full url here
+
+  - platform: template
+    sensors:
+      sys_up_time:
+        friendly_name: "Sys Up Time"
+        value_template: "{{ state_attr('sensor.sys_stats_times', 'data')['elapsed_readable'] }}"
+        icon_template: mdi:counter
