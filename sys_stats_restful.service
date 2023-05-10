@@ -1,0 +1,13 @@
+[Unit]
+Description=OS Stats Rest API Service
+After=network.target
+
+[Service]
+Type=simple
+DynamicUser=yes
+Restart=on-failure
+RestartSec=10s
+ExecStart=/home/sys_stat_py/venv/bin/python /home/sys_stat_py/entry.py
+
+[Install]
+WantedBy=multi-user.target

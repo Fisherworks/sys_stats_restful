@@ -1,0 +1,30 @@
+  - platform: rest
+    name: Tinker HW Stats  # name this as you need, here I'm using Asus Tinker Board 2S
+    json_attributes:
+      - du
+      - temps
+    scan_interval: 120  # how often the ha queries the restful service and update data (in seconds)
+    resource: http://192.168.10.253:9090/stats  # setup your service host as full url here
+
+  - platform: template
+    sensors:
+      disk_free_size:
+        friendly_name: "Disk Free Size" 
+        value_template: "{{ state_attr('sensor.tinker_hw_stats', 'du')['free_size'] | float }}"
+        icon_template: mdi:harddisk
+        unit_of_measurement: "MB"
+      disk_free_rate:
+        friendly_name: "Disk Free Rate" 
+        value_template: "{{ state_attr('sensor.tinker_hw_stats', 'du')['free_rate'] | float }}"
+        icon_template: mdi:harddisk
+        unit_of_measurement: "%"
+      cpu_temp:
+        friendly_name: "CPU Temperature"
+        value_template: "{{ state_attr('sensor.tinker_hw_stats', 'temps')['cpu_thermal']['curr'] | float }}"
+        icon_template: mdi:cpu-64-bit
+        unit_of_measurement: "°C"
+      gpu_temp:
+        friendly_name: "GPU Temperature"
+        value_template: "{{ state_attr('sensor.tinker_hw_stats', 'temps')['gpu_thermal']['curr'] | float }}"
+        icon_template: mdi:expansion-card
+        unit_of_measurement: "°C"
