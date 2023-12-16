@@ -58,8 +58,10 @@ def stats(request, data_type):
 
     def get_multiple_temperatures():
         temps = sensors_temperatures()
-        return {k: {'curr': round(v[0].current, 2), 'crit': round(v[0].critical, 2)}
-                for k, v in temps.items() if v}
+        return {
+            k: {'curr': round(v[0].current, 2) if v[0].current else None,
+                'crit': round(v[0].critical, 2) if v[0].critical else None}
+            for k, v in temps.items() if v}
 
     def get_boot_time():
         time_of_boot = datetime.fromtimestamp(boot_time())

@@ -1,2 +1,2 @@
-microdot==1.3.0
-psutil==5.9.5
+microdot==1.3.4
+psutil==5.9.6
